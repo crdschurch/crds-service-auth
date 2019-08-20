@@ -6,6 +6,7 @@ using Crossroads.Web.Common.Security;
 using MinistryPlatform.Models;
 using Newtonsoft.Json.Linq;
 using Crossroads.Service.Auth.Interfaces;
+using System.Threading.Tasks;
 
 namespace Crossroads.Service.Auth.Services
 {
@@ -23,18 +24,18 @@ namespace Crossroads.Service.Auth.Services
             _mpRestBuilder = mpRestBuilder;
         }
 
-        public int GetMpContactIdFromToken(string token)
+        public async Task<int> GetMpContactIdFromToken(string token)
         {
-            int contactId = _authenticationRepository.GetContactId(token);
+            int contactId = await _authenticationRepository.GetContactIdAsync(token);
 
             return contactId;
         }
 
-        public MpUserInfo GetMpUserInfoFromContactId(int contactId, string mpAPIToken)
+        public async Task<MpUserInfo> GetMpUserInfoFromContactId(int contactId, string mpAPIToken)
         {
             if (contactId > 0)
             {
-                return GetMpUserInfo(contactId, mpAPIToken);
+                return await GetMpUserInfo(contactId, mpAPIToken);
             }
             else
             {
@@ -43,7 +44,7 @@ namespace Crossroads.Service.Auth.Services
             }
         }
 
-        public Dictionary<int, string> GetRoles(string mpAPIToken, int mpContactId)
+        public async Task<Dictionary<int, string>> GetRoles(string mpAPIToken, int mpContactId)
         {
             Dictionary<int, string> rolesDict = new Dictionary<int, string>();
 
@@ -53,11 +54,11 @@ namespace Crossroads.Service.Auth.Services
                     "Role_ID_Table.Role_Name"
                 };
 
-            var roles = _mpRestBuilder.NewRequestBuilder()
+            var roles = await _mpRestBuilder.NewRequestBuilder()
                                       .WithAuthenticationToken(mpAPIToken)
                                       .WithSelectColumns(columns)
                                       .WithFilter($"User_ID_Table_Contact_ID_Table.[Contact_ID]={mpContactId}")
-                                      .Build()
+                                      .BuildAsync()
                                       .Search<JObject>("dp_User_Roles");
 
             if (roles == null)
@@ -73,7 +74,7 @@ namespace Crossroads.Service.Auth.Services
             return rolesDict;
         }
 
-        private MpUserInfo GetMpUserInfo(int contactId, string mpAPIToken)
+        private async Task<MpUserInfo> GetMpUserInfo(int contactId, string mpAPIToken)
         {
             var columns = new string[] {
                     "Contacts.Contact_ID",
@@ -85,11 +86,11 @@ namespace Crossroads.Service.Auth.Services
                     "User_Account_Table.Can_Impersonate"
                 };
 
-            var result = _mpRestBuilder.NewRequestBuilder()
+            var result = await _mpRestBuilder.NewRequestBuilder()
                                         .WithAuthenticationToken(mpAPIToken)
                                         .WithSelectColumns(columns)
                                         .WithFilter("Contacts.Contact_ID=" + contactId.ToString())
-                                        .Build()
+                                        .BuildAsync()
                                         .Search<MpContact>();
             
             if (result.Count != 1) {

@@ -33,11 +33,12 @@ namespace Crossroads.Service.Auth.Services
             UserInfo userInfo = null;
             Authorization authorizations = null;
 
-            string mpAPIToken = _apiUserRepository.GetDefaultApiClientToken();
+            //TODO: We should consider a caching solution as this can be expensive
+            string mpAPIToken = await _apiUserRepository.GetDefaultApiClientTokenAsync();
 
-            userInfo = _userService.GetUserInfo(token, decodedToken, mpAPIToken);
+            userInfo = await _userService.GetUserInfo(token, decodedToken, mpAPIToken);
 
-            authorizations = _userService.GetAuthorizations(decodedToken, mpAPIToken, userInfo.Mp.ContactId);
+            authorizations = await _userService.GetAuthorizations(decodedToken, mpAPIToken, userInfo.Mp.ContactId);
 
             Authentication authentication = GetAuthentication(decodedToken);
 

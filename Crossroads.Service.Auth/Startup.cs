@@ -34,7 +34,7 @@ namespace Crossroads.Service.Auth
 
             string vaultRoleId = System.Environment.GetEnvironmentVariable("VAULT_ROLE_ID");
             string vaultSecretId = System.Environment.GetEnvironmentVariable("VAULT_SECRET_ID");
-            SettingsService settingsService = new SettingsService();
+            SettingsService settingsService = new SettingsService(vaultRoleId, vaultSecretId);
             services.AddSingleton<ISettingsService>(settingsService);
 
             //Logging
