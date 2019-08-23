@@ -1,11 +1,12 @@
 ﻿using Crossroads.Web.Auth.Models;
+using System.Threading.Tasks;
 
 namespace Crossroads.Service.Auth.Interfaces
 {
     public interface IUserService
     {
-        UserInfo GetUserInfo(string originalToken, CrossroadsDecodedToken crossroadsDecodedToken, string mpAPIToken);
+        Task<UserInfo> GetUserInfo(string originalToken, CrossroadsDecodedToken crossroadsDecodedToken, string mpAPIToken);
 
-        Authorization GetAuthorizations(CrossroadsDecodedToken crossroadsDecodedToken, string mpAPIToken, int mpContactId);
+        Task<Authorization> GetAuthorizations(CrossroadsDecodedToken crossroadsDecodedToken, string mpAPIToken, int mpContactId);
     }
 }
