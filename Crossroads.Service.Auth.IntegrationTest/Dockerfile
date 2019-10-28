@@ -1,4 +1,4 @@
-FROM cypress/included:3.2.0
+FROM cypress/included:3.5.0
 WORKDIR /cypress_auth_integration
 
 COPY package.json .
