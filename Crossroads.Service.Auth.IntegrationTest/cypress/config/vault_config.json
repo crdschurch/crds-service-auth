@@ -1,0 +1,16 @@
+{
+  "sources": [
+    {
+      "secret": "Crossroads.Service.Auth",
+      "keys": ["OKTA_OAUTH_BASE_URL"]
+    },
+    {
+      "secret": "Crossroads.Automation",
+      "keys": ["OKTA_TOKEN_AUTH", "BEN_KENOBI_PW"]
+    },
+    {
+      "secret": "common",
+      "keys": ["CRDS_GATEWAY_BASE_URL"]
+    }
+  ]
+}
