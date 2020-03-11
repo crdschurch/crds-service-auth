@@ -39,6 +39,7 @@ namespace Crossroads.Service.Auth.Services
             }
             else
             {
+                ///TODO update logger message
                 _logger.Error("No contactId Available for token");
                 throw new NoContactIdAvailableException();
             }
@@ -94,9 +95,7 @@ namespace Crossroads.Service.Auth.Services
                                         .Search<MpContact>();
             
             if (result.Count != 1) {
-                string errorString = "Invalid result length for mp user info query. Num Results: " + result.Count.ToString();
-                _logger.Error(errorString);
-                throw new InvalidNumberOfResultsForMpContact(errorString);
+                return null;
             }
 
             var contact = result[0];
