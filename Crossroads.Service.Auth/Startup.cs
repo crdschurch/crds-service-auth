@@ -63,7 +63,7 @@ namespace Crossroads.Service.Auth
             services.AddSingleton<IOktaUserService, OktaUserService>();
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IAuthService, AuthService>();
-            services.AddSingleton<IIdentityservice, IdentityService>();
+            services.AddSingleton<IIdentityService, IdentityService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

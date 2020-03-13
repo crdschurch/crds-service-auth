@@ -14,9 +14,9 @@ namespace Crossroads.Service.Auth.Services
 
         private IMpUserService _mpUserService;
         private IOktaUserService _oktaUserService;
-        private IIdentityservice _identityService;
+        private IIdentityService _identityService;
 
-        public UserService(IMpUserService mpUserService, IOktaUserService oktaUserService, IIdentityservice identityservice)
+        public UserService(IMpUserService mpUserService, IOktaUserService oktaUserService, IIdentityService identityservice)
         {
             _mpUserService = mpUserService;
             _oktaUserService = oktaUserService;
@@ -28,7 +28,7 @@ namespace Crossroads.Service.Auth.Services
                                        string mpAPIToken)
         {
             UserInfo userInfoObject = new UserInfo();
-            int contactId = await GetContactIdFromToken(originalToken, crossroadsDecodedToken);
+            var contactId = await GetContactIdFromToken(originalToken, crossroadsDecodedToken);
 
             userInfoObject.Mp = await _mpUserService.GetMpUserInfoFromContactId(contactId, mpAPIToken);
             if(userInfoObject.Mp == null)
@@ -66,7 +66,7 @@ namespace Crossroads.Service.Auth.Services
             return authorizationObject;
         }
 
-        private async Task<int> GetContactIdFromToken(string originalToken, CrossroadsDecodedToken crossroadsDecodedToken)
+        public async Task<int> GetContactIdFromToken(string originalToken, CrossroadsDecodedToken crossroadsDecodedToken)
         {
             int contactId = -1;
 

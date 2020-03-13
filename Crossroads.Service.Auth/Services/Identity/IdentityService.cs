@@ -7,7 +7,7 @@ using Crossroads.Service.Auth.Models;
 
 namespace Crossroads.Service.Auth.Services
 {
-    public class IdentityService : IIdentityservice
+    public class IdentityService : IIdentityService
     {
         protected virtual HttpClient client => _client;
         private static readonly HttpClient _client = new HttpClient();
