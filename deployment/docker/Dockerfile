@@ -3,7 +3,7 @@ WORKDIR /app
  
 # Copy files to /app 
 COPY ./Crossroads.Service.Auth ./Crossroads.Service.Auth
-COPY ./Crossroads.Service.Auth.Test ./Crossroads.Service.Auth.Test
+COPY ./Crossroads.Service.Auth.Test ./Crossroads.Service.Auth.Tests
 COPY ./Crossroads.Service.Auth.sln ./Crossroads.Service.Auth.sln
  
 # Run Unit Tests 
