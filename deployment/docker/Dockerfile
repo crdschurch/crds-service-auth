@@ -7,7 +7,7 @@ COPY ./Crossroads.Service.Auth.Tests ./Crossroads.Service.Auth.Tests
 COPY ./Crossroads.Service.Auth.sln ./Crossroads.Service.Auth.sln
  
 # Run Unit Tests 
-RUN dotnet test Crossroads.Service.Auth.Test/Crossroads.Service.Auth.Tests.csproj 
+RUN dotnet test Crossroads.Service.Auth.Tests/Crossroads.Service.Auth.Tests.csproj 
  
 # Publish build to out directory 
 RUN dotnet publish -c Release -o out 
