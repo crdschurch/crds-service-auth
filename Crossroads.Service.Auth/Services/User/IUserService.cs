@@ -8,5 +8,6 @@ namespace Crossroads.Service.Auth.Interfaces
         Task<UserInfo> GetUserInfo(string originalToken, CrossroadsDecodedToken crossroadsDecodedToken, string mpAPIToken);
 
         Task<Authorization> GetAuthorizations(CrossroadsDecodedToken crossroadsDecodedToken, string mpAPIToken, int mpContactId);
+        Task<int> GetContactIdFromToken(string originalToken, CrossroadsDecodedToken crossroadsDecodedToken);
     }
 }
