@@ -68,7 +68,8 @@ namespace Crossroads.Service.Auth.Tests
             var contactId = 12345;
             var userInfo = new MpUserInfo(){
                 ContactId = contactId
-            };                     
+            };
+            serviceFactory.IdentityService.GetValidContactIdFromIdentityReturnsInt(contactId);                     
             serviceFactory.OktaUserService.GetMpContactIdFromDecodedTokenReturnsInt(contactId);                        
             serviceFactory.MpUserService.GetMpUserInfoFromContactIdReturnsUserInfoSequence(null, userInfo);
             var userService = serviceFactory.Build();

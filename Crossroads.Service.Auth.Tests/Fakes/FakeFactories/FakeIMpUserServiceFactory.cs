@@ -29,8 +29,8 @@ namespace Crossroads.Service.Auth.Tests.Fakes.FakeFactories
         {
             FakeIMpUserService.SetupSequence(us => us.GetMpUserInfoFromContactId(
             It.IsAny<int>(), It.IsAny<string>()))
-            .Returns(Task.FromResult<MpUserInfo>(result1))
-            .Returns(Task.FromResult<MpUserInfo>(result2));
+            .ReturnsAsync(result1)
+            .ReturnsAsync(result2);
         }
 
         public void GetMpContactIdFromTokenReturnsInt(int contactId)

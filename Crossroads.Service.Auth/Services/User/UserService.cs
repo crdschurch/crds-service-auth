@@ -37,7 +37,7 @@ namespace Crossroads.Service.Auth.Services
                 if(oktaId != null)
                 {
                     var updatedContactId = await _identityService.GetValidContactIdFromIdentity(oktaId, contactId);                    
-                    if(updatedContactId != -1)
+                    if(updatedContactId > 0)
                     {
                         userInfoObject.Mp = await _mpUserService.GetMpUserInfoFromContactId(updatedContactId, mpAPIToken);
                         if (userInfoObject.Mp != null)
@@ -73,7 +73,7 @@ namespace Crossroads.Service.Auth.Services
             if (crossroadsDecodedToken.authProvider == AuthConstants.AUTH_PROVIDER_OKTA)
             {
                 contactId = _oktaUserService.GetMpContactIdFromDecodedToken(crossroadsDecodedToken);
-                if (contactId == -1)
+                if (contactId <= 0)
                 {                    
                     string exceptionString = $"No mpContactID available for JWT with issuer: {crossroadsDecodedToken.authProvider}, and JWT id: {crossroadsDecodedToken.decodedToken.Id}";
                     _logger.Error(exceptionString);
