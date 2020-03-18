@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Crossroads.Service.Auth.Interfaces;
 using Crossroads.Service.Auth.Exceptions;
 using System.Threading.Tasks;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Crossroads.Service.Auth.Services
 {
@@ -13,11 +14,13 @@ namespace Crossroads.Service.Auth.Services
 
         private IMpUserService _mpUserService;
         private IOktaUserService _oktaUserService;
+        private IIdentityService _identityService;
 
-        public UserService(IMpUserService mpUserService, IOktaUserService oktaUserService)
+        public UserService(IMpUserService mpUserService, IOktaUserService oktaUserService, IIdentityService identityservice)
         {
             _mpUserService = mpUserService;
             _oktaUserService = oktaUserService;
+            _identityService = identityservice;
         }
 
         public async Task<UserInfo> GetUserInfo(string originalToken,
@@ -25,9 +28,26 @@ namespace Crossroads.Service.Auth.Services
                                        string mpAPIToken)
         {
             UserInfo userInfoObject = new UserInfo();
-            int contactId = await GetContactIdFromToken(originalToken, crossroadsDecodedToken);
+            var contactId = await GetContactIdFromToken(originalToken, crossroadsDecodedToken);
 
             userInfoObject.Mp = await _mpUserService.GetMpUserInfoFromContactId(contactId, mpAPIToken);
+            if(userInfoObject.Mp == null)
+            {
+                var oktaId = crossroadsDecodedToken.decodedToken.Payload["uid"].ToString();
+                if(oktaId != null)
+                {
+                    var updatedContactId = await _identityService.GetValidContactIdFromIdentity(oktaId, contactId);                    
+                    if(updatedContactId > 0)
+                    {
+                        userInfoObject.Mp = await _mpUserService.GetMpUserInfoFromContactId(updatedContactId, mpAPIToken);
+                        if (userInfoObject.Mp != null)
+                            return userInfoObject;                      
+                    }                    
+                }
+                string errorString = "Invalid result length for mp user info query.";
+                _logger.Error(errorString);
+                throw new InvalidNumberOfResultsForMpContact(errorString);                
+            }
 
             return userInfoObject;
         }
@@ -46,13 +66,20 @@ namespace Crossroads.Service.Auth.Services
             return authorizationObject;
         }
 
-        private async Task<int> GetContactIdFromToken(string originalToken, CrossroadsDecodedToken crossroadsDecodedToken)
+        public async Task<int> GetContactIdFromToken(string originalToken, CrossroadsDecodedToken crossroadsDecodedToken)
         {
             int contactId = -1;
 
             if (crossroadsDecodedToken.authProvider == AuthConstants.AUTH_PROVIDER_OKTA)
             {
                 contactId = _oktaUserService.GetMpContactIdFromDecodedToken(crossroadsDecodedToken);
+                if (contactId <= 0)
+                {                    
+                    string exceptionString = $"No mpContactID available for JWT with issuer: {crossroadsDecodedToken.authProvider}, and JWT id: {crossroadsDecodedToken.decodedToken.Id}";
+                    _logger.Error(exceptionString);
+                    throw new NoContactIdAvailableException(exceptionString);
+                }
+
             }
             else if (crossroadsDecodedToken.authProvider == AuthConstants.AUTH_PROVIDER_MP)
             {
@@ -63,14 +90,7 @@ namespace Crossroads.Service.Auth.Services
                 //This should never happen based on previous logic
                 _logger.Warn("Invalid issuer when there should not be an invalid issuer w/ token: " + originalToken);
                 throw new SecurityTokenInvalidIssuerException();
-            }
-
-            if (contactId == -1)
-            {
-                string exceptionString = $"No mpContactID available for JWT with issuer: {crossroadsDecodedToken.authProvider}, and JWT id: {crossroadsDecodedToken.decodedToken.Id}";
-                _logger.Error(exceptionString);
-                throw new NoContactIdAvailableException(exceptionString);
-            }
+            }            
 
             return contactId;
         }
