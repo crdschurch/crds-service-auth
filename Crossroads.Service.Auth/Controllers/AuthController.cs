@@ -28,6 +28,8 @@ namespace Crossroads.Service.Auth.Controllers
         [HttpGet("authorize")]
         public async Task<ActionResult<AuthDTO>> Get([FromHeader] string Authorization)
         {
+            //Logs for Gateway Debug
+            _logger.Info($"Request received for Token : {Authorization}");
             try
             {
                 AuthDTO authDTO = await _authService.GetAuthorization(Authorization);
