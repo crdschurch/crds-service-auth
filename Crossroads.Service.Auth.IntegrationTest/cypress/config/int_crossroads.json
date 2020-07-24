@@ -1,0 +1,8 @@
+{
+  "baseUrl": "https://api-int.crossroads.net/auth",
+  "testFiles": "**/*spec.js",
+  "env":{
+    "CRDS_ENV": "int",
+    "vaultEnv": "int"
+  }
+}

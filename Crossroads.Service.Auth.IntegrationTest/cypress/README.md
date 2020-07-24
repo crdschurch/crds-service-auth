@@ -2,7 +2,7 @@
 ### Install & Configure Variables
 
 1) Navigate to Crossroads.Service.Auth.IntegrationTest/
-2) Install npm packages with ```$npm i```
+2) Install npm packages with ```npm ci```
 3) Configure environment variables by creating a cypress.env.json file and add the following variables. (Do NOT check this file into GitHub)
 ```json
 {

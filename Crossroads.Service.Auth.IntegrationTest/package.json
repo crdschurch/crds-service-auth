@@ -7,14 +7,16 @@
     "type": "git",
     "url": "crds-service-auth"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Sarah Henney",
+  "scripts": {
+    "test": "npx cypress run --config-file ./cypress/config/int_crossroads.json"
+  },
   "dependencies": {
-    "crds-cypress-config": "^1.0.0",
-    "cypress": "^3.5.0"
+    "crds-cypress-config": "^1.0.1",
+    "cypress": "^4.11.0"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
-    "eslint-plugin-cypress": "^2.2.1"
+    "eslint-plugin-cypress": "^2.11.1"
   }
 }
