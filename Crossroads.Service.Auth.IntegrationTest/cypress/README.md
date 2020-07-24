@@ -1,51 +1,49 @@
-## Basic Setup
-### Install & Configure Variables
+# Integration Tests
+## Quick Start
+### Test live service (api-int.crossroads.net/auth)
+0) Install Node.js
+1) Load [environment variables](#environment-variables)
+1) `cd ./Crossroads.Service.Auth.IntegrationTest`
+2) `npm ci`
+3) `npm run test` (headless mode) or `npx cypress open` (interactive mode)
 
-1) Navigate to Crossroads.Service.Auth.IntegrationTest/
-2) Install npm packages with ```npm ci```
-3) Configure environment variables by creating a cypress.env.json file and add the following variables. (Do NOT check this file into GitHub)
-```json
-{
-  "VAULT_ROLE_ID": "add id here",
-  "VAULT_SECRET_ID": "add secret here",
-  "CRDS_ENV": "environment prefix here"
-}
-```
-Note: There are other ways to configure environment variables for Cypress. Check out the official documentation [here](https://docs.cypress.io/guides/guides/environment-variables.html#Setting).
+### Test locally hosted service with Docker
+0) Install Docker
+1) Load all [environment variables](#environment-variables)
+2) Run `docker-compose -f ./deployment/docker-integration-tests/docker-compose.yml up --build --abort-on-container-exit --exit-code-from integration_tests`
 
-### Run Tests
+## Environment Variables
 
-Once installed and configured, run Cypress tests headless with
-
-```$npx cypress run --config baseUrl=$BASE_URL```
-
-or with display
-
-```$npx cypress open --config baseUrl=$BASE_URL```
-
-where $BASE_URL is the (fully qualified) auth service endpoint prefix to be tested (ex. https://api-int.crossroads.net/auth/).
-
-
-## Docker Setup
-
-Docker must be installed and running on your machine first. You can find it [here](https://www.docker.com/products/docker-desktop).
-
-### Configure Variables
-
-1) Navigate to the top-level directory (where docker-compose-test.yml lives)
-2) Configure environment variables by creating a .env file and add the following variables. (Do NOT check this file into GitHub)
-
+The following environment variables must be set for all scenarios
 ```bash
-VAULT_ROLE_ID=addIdHere
-VAULT_SECRET_ID=addSecretHere
-CRDS_ENV=addEnvironmentHere
+VAULT_ROLE_ID
+VAULT_SECRET_ID
 ```
+They can be set globally or locally as long as they're accessible in the terminal you're in. The Vault role being used must have access to the environment being tested.
 
-### Run Tests
-
-Once configured, the following commands will create Docker containers for the auth service and Cypress tests, and run the tests against that service.
-
+When running tests in Docker this variable must also be set. This configures both the app and vault environments.
 ```bash
-$docker-compose -f docker-compose-test.yml build
-$docker-compose -f docker-compose-test.yml up --abort-on-container-exit --exit-code-from cypress
+CRDS_ENV
 ```
+
+## Changing Configurations
+
+Cypress tests will run against the live `api-int.crossroads.net/auth` service by default, but can be configured to run against other live or locally hosted environments by setting the baseUrl and vaultEnv variables. 
+
+You can either configure and run in one with one command:
+
+`npx cypress open --config baseUrl=https://api-demo.crossroads.net/auth --env vaultEnv=demo`
+
+Or set the environment variables in your terminal for Cypress to pick up automatically
+```
+# powershell
+$env:CYPRESS_baseUrl="https://api-demo.crossroads.net/auth"
+$env:CYPRESS_vaultEnv="demo"
+
+# bash/sh
+CYPRESS_baseUrl=https://api-demo.crossroads.net/auth
+CYPRESS_vaultEnv=demo
+```
+Then start Cypress with `npx cypress open`, `npx cypress run` or `npm run test`.
+
+If you're using `npx` to run Cypress, you can run in interactive mode with `npx cypress open` or in headless mode with `npx cypress run`.

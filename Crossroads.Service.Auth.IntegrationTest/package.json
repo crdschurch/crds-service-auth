@@ -9,11 +9,12 @@
   },
   "author": "Sarah Henney",
   "scripts": {
-    "test": "npx cypress run --config-file ./cypress/config/int_crossroads.json"
+    "test": "npx cypress run"
   },
   "dependencies": {
     "crds-cypress-config": "^1.0.1",
-    "cypress": "^4.11.0"
+    "cypress": "^4.11.0",
+    "wait-on": "^5.1.0"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
