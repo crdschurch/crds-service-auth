@@ -10,14 +10,13 @@ services:
       - VAULT_ROLE_ID=${VAULT_ROLE_ID}
       - VAULT_SECRET_ID=${VAULT_SECRET_ID}
       - CRDS_ENV=${CRDS_ENV}
-    ports:
-      - "5000:80"
   integration_tests:
     build:
       context: ../../ 
       dockerfile: ./deployment/docker-integration-tests/Dockerfile
     container_name: cypress_auth_integration
     image: crdschurch/crds-service-auth-integration:${DOCKER_TAG:-local}
+    ipc: host # Cypress workaround for render crashes in docker
     depends_on:
       - auth
     environment:
