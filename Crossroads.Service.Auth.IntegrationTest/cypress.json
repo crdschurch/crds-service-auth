@@ -1,4 +1,8 @@
 {
+  "baseUrl": "https://api-int.crossroads.net/auth",
   "testFiles": "**/*_spec.js",
-  "video": false
+  "video": false,
+  "env":{
+    "vaultEnv": "int"
+  }
 }
