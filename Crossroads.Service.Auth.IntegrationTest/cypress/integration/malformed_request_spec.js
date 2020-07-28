@@ -1,18 +1,16 @@
+import {requestAuthorization} from './requestAuthorizationHelper';
+
 describe('Tests malformed requests', function () {
   const malformedResponse = 'Unable to decode token, it was malformed, empty, or null';
   const malformedTokens = ['123456', '', null, undefined];
 
   malformedTokens.forEach(token => {
     it(`Request cannot be decoded given token '${token}'`, function () {
-      cy.request({
-        method: 'GET',
-        url: '/api/authorize',
-        headers: { Authorization: token },
-        failOnStatusCode: false
-      }).then(response => {
-        expect(response.body).to.contain(malformedResponse);
-        expect(response.status).to.eq(400);
-      });
+      requestAuthorization(token, false)
+        .then(response => {
+          expect(response.body).to.contain(malformedResponse);
+          expect(response.status).to.eq(400);
+        });
     });
   });
 
