@@ -73,7 +73,7 @@ namespace Crossroads.Service.Auth.Services
             }
             else
             {
-                string exceptionMessage = $"The token issuer: {decodedToken.Issuer} was invalid";
+                string exceptionMessage = $"The token issuer: {decodedToken.Issuer} was invalid.  Expected {mpConfiguration.Issuer} or {oktaConfiguration.Issuer}";
                 _logger.Warn(exceptionMessage);
                 throw new SecurityTokenInvalidIssuerException(exceptionMessage);
             }
