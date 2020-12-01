@@ -1,8 +1,9 @@
 {
+  "projectId": "gtuyxm",
   "baseUrl": "https://api-int.crossroads.net/auth",
   "testFiles": "**/*_spec.js",
   "video": false,
-  "env":{
+  "env": {
     "vaultEnv": "int"
   }
 }
