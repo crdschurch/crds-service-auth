@@ -1,10 +1,9 @@
-FROM cypress/included:4.11.0
+FROM cypress/included:5.6.0
 WORKDIR /Crossroads.Service.Auth.IntegrationTest
 
-COPY ./Crossroads.Service.Auth.IntegrationTest ./
+COPY Crossroads.Service.Auth.IntegrationTest .
+
 ENV CI=1
-RUN npm ci
+RUN npm ci --production && npx cypress verify
 
-RUN npx cypress verify
-
-ENTRYPOINT [ "npm", "run", "test" ]
+ENTRYPOINT [ "npx", "cypress", "run"]
