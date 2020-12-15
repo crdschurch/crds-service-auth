@@ -26,6 +26,12 @@ When running tests in Docker this variable must also be set. This configures bot
 CRDS_ENV
 ```
 
+If you want to report results to the Cypress Dashboard, this variable must also be set. Results should *only* be reported to the Dashboard when running in the CI pipeline so we don't clog our metrics with experimental results.
+```bash
+CYPRESS_RECORD_KEY
+```
+If you really need to record something locally, please set the CRDS_ENV variable to something like "test" or "experimental". Please do *not* set it to `int`, `demo` or `prod` as these are reserved for tests run in the CI pipeline.
+
 ## Changing Configurations
 
 Cypress tests will run against the live `api-int.crossroads.net/auth` service by default, but can be configured to run against other live or locally hosted environments by setting the baseUrl and vaultEnv variables. 
